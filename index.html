@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Posting App</title>
+    <style>
+        .posts {
+            max-width: 600px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .post {
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+
+        .graph {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .day {
+            width: 10px;
+            height: 10px;
+            margin: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="graph"></div>
+    <div class="posts"></div>
+    <div style="text-align: center;">
+        <textarea id="postInput" rows="4" cols="50"></textarea><br>
+        <button onclick="addPost()">Post</button>
+    </div>
+
+    <script>
+        let posts = [];
+
+        function addPost() {
+            const postInput = document.getElementById('postInput');
+            const postText = postInput.value;
+            if (postText) {
+                const today = new Date().toISOString().split('T')[0];
+                posts.push({ date: today, text: postText });
+                displayPosts();
+                displayGraph();
+                postInput.value = '';
+            }
+        }
+
+        function displayPosts() {
+            const postsDiv = document.querySelector('.posts');
+            postsDiv.innerHTML = '';
+            for (let post of posts) {
+                const postDiv = document.createElement('div');
+                postDiv.classList.add('post');
+                postDiv.innerHTML = `<strong>${post.date}</strong><p>${post.text}</p>`;
+                postsDiv.appendChild(postDiv);
+            }
+        }
+
+        function displayGraph() {
+            const graphDiv = document.querySelector('.graph');
+            graphDiv.innerHTML = '';
+            const dates = posts.map(post => post.date);
+            const uniqueDates = [...new Set(dates)];
+            for (let i = 0; i < 30; i++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.classList.add('day');
+                if (uniqueDates.includes(new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0])) {
+                    dayDiv.style.backgroundColor = 'green';
+                } else {
+                    dayDiv.style.backgroundColor = 'lightgray';
+                }
+                graphDiv.appendChild(dayDiv);
+            }
+        }
+
+        displayGraph();
+    </script>
+</body>
+
+</html>
