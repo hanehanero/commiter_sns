@@ -1,0 +1,14 @@
+# Node.js
+node_modules/
+*.env
+*.log
+
+# Go
+*.exe
+*.test
+*.out
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
